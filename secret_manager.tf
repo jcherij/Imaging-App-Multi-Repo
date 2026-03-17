@@ -30,7 +30,7 @@ resource "google_logging_project_sink" "secret_access_audit" {
 
   # Routes to the project's default log bucket — not a dedicated, access-controlled bucket
   # _Default has no retention policy, no IAM restrictions beyond project-level viewer
-  destination = "logging.googleapis.com/projects/${var.gcp_project_id}/locations/global/buckets/_Default"
+  destination = "logging.googleapis.com/projects/${var.gcp_project_id}/locations/global/buckets/security_audit"
 
   # Captures Secret Manager data access events for the DB credential
   # NOTE: resource.name path used here — matches admin activity logs
