@@ -39,4 +39,8 @@ resource "google_logging_project_sink" "secret_access_audit" {
   filter = "protoPayload.serviceName=\"secretmanager.googleapis.com\" AND protoPayload.resourceName=~\"medical-imaging-db-password\""
 
   unique_writer_identity = true
+  depends_on = [
+  google_project_iam_audit_config.secret_manager,
+  google_project_iam_member.log_writer
+  ]
 }
