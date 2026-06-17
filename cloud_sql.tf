@@ -16,7 +16,7 @@ resource "google_sql_database_instance" "main" {
 
   settings {
     tier              = "db-custom-1-3840"
-    availability_type = "ZONAL" # Single-zone — see ISSUE #1 above
+    availability_type = "REGIONAL" # Single-zone — see ISSUE #1 above
     disk_size         = 50
     disk_type         = "PD_SSD"
     # disk_autoresize removed — was causing unexpected billing increases in staging
@@ -75,4 +75,20 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = data.terraform_remote_state.platform.outputs.vpc_id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_range.name]
+}
+
+resource "kubernetes_network_policy" "namespace_default_deny" {
+  metadata {
+    name = "default-deny-all"
+  }
+
+  spec {
+    pod_selector {}
+    policy_types = ["Ingress", "Egress"]
+  }
+}
+resource "google_project_service" "enable_pubsub_api" {
+  project            = var.gcp_project_id
+  service            = "pubsub.googleapis.com"
+  disable_on_destroy = false
 }
