@@ -20,9 +20,6 @@ variable "db_password" {
   description = "Database master password — stored in Secret Manager after first apply"
   type        = string
   sensitive   = true
-  # NOTE: Default provided for bootstrapping only. After first apply, rotate this
-  # and reference the Secret Manager version instead.
-  default = "MedicalImages2024!"
 }
 
 # Reserved for GKE secondary ranges (pods + services) — not yet implemented
